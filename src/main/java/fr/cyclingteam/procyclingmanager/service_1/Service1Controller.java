@@ -11,7 +11,7 @@ public class Service1Controller {
 
     @GetMapping("service-1")
     public String test(){
-        return "test service 1 ok";
+        return "test service 1 ok with pull request comments taken into account";
     }
 
 }
