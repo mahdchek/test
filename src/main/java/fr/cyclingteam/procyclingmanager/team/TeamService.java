@@ -3,6 +3,7 @@ package fr.cyclingteam.procyclingmanager.team;
 
 import fr.cyclingteam.procyclingmanager.entities.Team;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,13 @@ public class TeamService {
 
     void createTeam(Team team) {
         repository.save(team);
+    }
+
+    @Transactional(rollbackFor = TestException.class)
+    void test() throws TestException {
+        Team team = repository.findById(1L).get();
+        team.setBudget(8000000L);
+        repository.save(team);
+        if (1 == 1) throw new TestException();
     }
 }

@@ -1,49 +1,58 @@
 package fr.cyclingteam.procyclingmanager.team;
 
 
+import fr.cyclingteam.procyclingmanager.Temperature;
 import fr.cyclingteam.procyclingmanager.entities.Team;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "teams")
 @Slf4j
-public class TeamController extends Thread {
+public class TeamController {
 
     private final TeamService teamService;
 
 
+    private final ApplicationContext context;
+    private final Temperature temperature;
+
+
     @Autowired
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, ApplicationContext context, Temperature temperature) {
         this.teamService = teamService;
+        this.context = context;
+        this.temperature = temperature;
     }
 
     @GetMapping("/{id}")
-    public TeamDto getTeamById(@PathVariable("id") Long id){
+    public TeamDto getTeamById(@PathVariable("id") Long id) {
         return teamService.getTeamById(id);
     }
 
 
     @GetMapping
-    public List<TeamDto> getAllTeams(){
+    public List<TeamDto> getAllTeams() {
         return teamService.getAllTeams();
     }
 
     @PostMapping
-    public String createTeam(@RequestBody Team team){
+    public String createTeam(@RequestBody Team team) {
         teamService.createTeam(team);
-
 
 
         return "creation successful";
     }
 
     @PostConstruct
-    public void test(){
+    public void test() {
 
         log.info("je suis passé par là");
 
@@ -55,13 +64,19 @@ public class TeamController extends Thread {
         maListe.add("test5");
 
 
-        for (int i = 0; i < maListe.size(); i++){
+        for (int i = 0; i < maListe.size(); i++) {
             if (maListe.get(i).equals("test3")) maListe.remove(i);
         }
 
 
+    }
 
 
+    @GetMapping("redirect")
+    public ResponseEntity testRedirect(){
+        return ResponseEntity.status(302)
+                .header("location", "https://google.fr")
+                .build();
     }
 
 
